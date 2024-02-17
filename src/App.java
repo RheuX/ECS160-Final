@@ -33,6 +33,11 @@ public class App extends JFrame {
         canvas = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
         clearCanvas();
 
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        // Setting up feature menu toolbar
+        JToolBar toolbar = setupFeatureMenu();
+        mainPanel.add(toolbar, BorderLayout.WEST);
+        
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -58,7 +63,8 @@ public class App extends JFrame {
             }
         });
 
-        add(panel);
+        mainPanel.add(panel, BorderLayout.CENTER);
+        add(mainPanel);
         setupMenuBar();
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,10 +154,14 @@ public class App extends JFrame {
         // File Menu
         JMenu fileMenu = new JMenu("File");
         JMenuItem saveItem = new JMenuItem("Save");
+        saveItem.setMnemonic(KeyEvent.VK_S);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         saveItem.addActionListener(e -> saveImage());
         fileMenu.add(saveItem);
 
         JMenuItem loadItem = new JMenuItem("Load");
+        loadItem.setMnemonic(KeyEvent.VK_L);
+        loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
         loadItem.addActionListener(e -> loadImage());
         fileMenu.add(loadItem);
 
@@ -163,8 +173,20 @@ public class App extends JFrame {
 
         // Edit Menu
         JMenu editMenu = new JMenu("Edit");
+
+        JMenuItem undoItem = new JMenuItem("Undo");
+        undoItem.setMnemonic(KeyEvent.VK_Z);
+        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+        editMenu.add(undoItem);
+
+        JMenuItem redoItem = new JMenuItem("Redo");
+        redoItem.setMnemonic(KeyEvent.VK_X);
+        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+        editMenu.add(redoItem);
+
         JMenuItem clearItem = new JMenuItem("Clear");
-        clearItem.addActionListener(e -> clearCanvas());
+        clearItem.setMnemonic(KeyEvent.VK_C);
+        clearItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
         editMenu.add(clearItem);
 
         // Help Menu
@@ -173,12 +195,69 @@ public class App extends JFrame {
         aboutItem.addActionListener(e -> showAbout());
         helpMenu.add(aboutItem);
 
+        // Canvas Menu
+        JMenu canvasMenu = new JMenu("Canvas");
+
+        JMenuItem resizeItem = new JMenuItem("Resize");
+        canvasMenu.add(resizeItem);
+
+        JMenuItem zoomInItem = new JMenuItem("Zoom In");
+        canvasMenu.add(zoomInItem);
+
+        JMenuItem zoomOutItem = new JMenuItem("Zoom Out");
+        canvasMenu.add(zoomOutItem);
+
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
+        menuBar.add(canvasMenu);
         menuBar.add(helpMenu);
+
         setJMenuBar(menuBar);
     }
 
+    private JToolBar setupFeatureMenu() {
+        JToolBar toolbar = new JToolBar(JToolBar.VERTICAL);
+        toolbar.setFloatable(false);
+    
+        // Panel for the label (centered)
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel featureMenuLabel = new JLabel("Feature Menu");
+        labelPanel.add(featureMenuLabel);
+        toolbar.add(labelPanel);
+    
+        // Search bar
+        JTextField searchBar = new JTextField();
+        searchBar.setPreferredSize(new Dimension(150, 25));
+        searchBar.setMaximumSize(new Dimension(150, 25));
+        toolbar.add(searchBar);
+    
+        // Tabbed pane for feature categories
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(150, 550)); // Adjust the size as needed
+
+        // Add tabs
+        tabbedPane.addTab("Dining Room", createPanel("Dining Room Features"));
+        tabbedPane.addTab("Living Room", createPanel("Living Room Features"));
+        tabbedPane.addTab("Bathroom", createPanel("Bathroom Features"));
+        tabbedPane.addTab("Kitchen", createPanel("Kitchen Features"));
+        tabbedPane.addTab("Bedroom", createPanel("Bedroom Features"));
+        tabbedPane.addTab("Structural", createPanel("Structural Features"));
+        tabbedPane.addTab("General", createPanel("General Features"));
+    
+        toolbar.add(tabbedPane, BorderLayout.NORTH); 
+
+        return toolbar;
+    }
+
+    /**
+     * Creates a simple JPanel with a label for the specified category.
+     */
+    private JPanel createPanel(String category) {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(category));
+        return panel;
+    }
+    
     /**
      * Main method to run the application.
      *
