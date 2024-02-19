@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-
+/*
+@author ChatGPT
+Creates a JToolBar which will store the different features that can be placed on the grid. 
+Includes a "Feature Menu" title, a search bar, and tabs for different categories of furniture.
+*/
 public class FeatureBarSetup {
     public static JToolBar setupFeatureMenu() {
         JToolBar toolbar = new JToolBar(JToolBar.VERTICAL);
