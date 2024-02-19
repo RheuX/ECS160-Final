@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.event.*;
 
+/*
+@author ChatGPT
+Creates a JMenuBar which will serve as the menu for file an canvas related actions. 
+*/
 public class MenuBarSetup {
     public static JMenuBar setupMenuBar() {
         JMenuBar menuBar = new JMenuBar();
