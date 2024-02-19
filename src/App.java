@@ -34,27 +34,50 @@ public class App extends JFrame {
         clearCanvas();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
+
         // Setting up feature menu toolbar
-        JToolBar toolbar = setupFeatureMenu();
+        JToolBar toolbar = FeatureBarSetup.setupFeatureMenu();
         mainPanel.add(toolbar, BorderLayout.WEST);
-        
-        JPanel panel = new JPanel() {
+
+        // Setting up the grid layout
+        JPanel gridPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                // Draw grid lines with a white background
+                g.setColor(Color.WHITE);
+                g.fillRect(0, 0, getWidth(), getHeight());
+    
+                g.setColor(Color.BLACK);
+    
+                int width = getWidth();
+                int height = getHeight();
+                int gridSize = 30;
+    
+                // Draw vertical grid lines
+                for (int x = 0; x <= width; x += gridSize) {
+                    g.drawLine(x, 0, x, height);
+                }
+    
+                // Draw horizontal grid lines
+                for (int y = 0; y <= height; y += gridSize) {
+                    g.drawLine(0, y, width, y);
+                }
+
+                // Draw the existing canvas on top of the grid
                 g.drawImage(canvas, 0, 0, null);
             }
         };
 
-        panel.setPreferredSize(new Dimension(800, 600));
-        panel.addMouseListener(new MouseAdapter() {
+        gridPanel.setPreferredSize(new Dimension(800, 600));
+        gridPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 lastPoint = e.getPoint();
             }
         });
 
-        panel.addMouseMotionListener(new MouseMotionAdapter() {
+        gridPanel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 drawLine(lastPoint, e.getPoint());
@@ -63,12 +86,16 @@ public class App extends JFrame {
             }
         });
 
-        mainPanel.add(panel, BorderLayout.CENTER);
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
         add(mainPanel);
-        setupMenuBar();
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+    }
+
+    private void setupMenuBar(JPanel gridPanel) {
+        JMenuBar menuBar = MenuBarSetup.setupMenuBar(); // Call the method from MenuBarSetup.java
+        setJMenuBar(menuBar); // Set the menuBar for the App frame
     }
 
     /**
@@ -146,124 +173,15 @@ public class App extends JFrame {
     }
 
     /**
-     * Sets up the menu bar with File, Edit, and Help menus.
-     */
-    private void setupMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        // File Menu
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem saveItem = new JMenuItem("Save");
-        saveItem.setMnemonic(KeyEvent.VK_S);
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-        saveItem.addActionListener(e -> saveImage());
-        fileMenu.add(saveItem);
-
-        JMenuItem loadItem = new JMenuItem("Load");
-        loadItem.setMnemonic(KeyEvent.VK_L);
-        loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
-        loadItem.addActionListener(e -> loadImage());
-        fileMenu.add(loadItem);
-
-        fileMenu.add(new JSeparator()); // Separator
-
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.addActionListener(e -> System.exit(0));
-        fileMenu.add(exitItem);
-
-        // Edit Menu
-        JMenu editMenu = new JMenu("Edit");
-
-        JMenuItem undoItem = new JMenuItem("Undo");
-        undoItem.setMnemonic(KeyEvent.VK_Z);
-        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
-        editMenu.add(undoItem);
-
-        JMenuItem redoItem = new JMenuItem("Redo");
-        redoItem.setMnemonic(KeyEvent.VK_X);
-        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-        editMenu.add(redoItem);
-
-        JMenuItem clearItem = new JMenuItem("Clear");
-        clearItem.setMnemonic(KeyEvent.VK_C);
-        clearItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-        editMenu.add(clearItem);
-
-        // Help Menu
-        JMenu helpMenu = new JMenu("Help");
-        JMenuItem aboutItem = new JMenuItem("About");
-        aboutItem.addActionListener(e -> showAbout());
-        helpMenu.add(aboutItem);
-
-        // Canvas Menu
-        JMenu canvasMenu = new JMenu("Canvas");
-
-        JMenuItem resizeItem = new JMenuItem("Resize");
-        canvasMenu.add(resizeItem);
-
-        JMenuItem zoomInItem = new JMenuItem("Zoom In");
-        canvasMenu.add(zoomInItem);
-
-        JMenuItem zoomOutItem = new JMenuItem("Zoom Out");
-        canvasMenu.add(zoomOutItem);
-
-        menuBar.add(fileMenu);
-        menuBar.add(editMenu);
-        menuBar.add(canvasMenu);
-        menuBar.add(helpMenu);
-
-        setJMenuBar(menuBar);
-    }
-
-    private JToolBar setupFeatureMenu() {
-        JToolBar toolbar = new JToolBar(JToolBar.VERTICAL);
-        toolbar.setFloatable(false);
-    
-        // Panel for the label (centered)
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel featureMenuLabel = new JLabel("Feature Menu");
-        labelPanel.add(featureMenuLabel);
-        toolbar.add(labelPanel);
-    
-        // Search bar
-        JTextField searchBar = new JTextField();
-        searchBar.setPreferredSize(new Dimension(150, 25));
-        searchBar.setMaximumSize(new Dimension(150, 25));
-        toolbar.add(searchBar);
-    
-        // Tabbed pane for feature categories
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setPreferredSize(new Dimension(150, 550)); // Adjust the size as needed
-
-        // Add tabs
-        tabbedPane.addTab("Dining Room", createPanel("Dining Room Features"));
-        tabbedPane.addTab("Living Room", createPanel("Living Room Features"));
-        tabbedPane.addTab("Bathroom", createPanel("Bathroom Features"));
-        tabbedPane.addTab("Kitchen", createPanel("Kitchen Features"));
-        tabbedPane.addTab("Bedroom", createPanel("Bedroom Features"));
-        tabbedPane.addTab("Structural", createPanel("Structural Features"));
-        tabbedPane.addTab("General", createPanel("General Features"));
-    
-        toolbar.add(tabbedPane, BorderLayout.NORTH); 
-
-        return toolbar;
-    }
-
-    /**
-     * Creates a simple JPanel with a label for the specified category.
-     */
-    private JPanel createPanel(String category) {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel(category));
-        return panel;
-    }
-    
-    /**
      * Main method to run the application.
      *
      * @param args Command line arguments (not used).
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new App().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            App app = new App();
+            app.setupMenuBar(null); // Call setupMenuBar to set up the menuBar
+            app.setVisible(true);
+        });
     }
 }
