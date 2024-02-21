@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-
+/*
+@author ChatGPT
+Creates a panel. Called by FeatureBarSetup it creates the buttons for furniture options within the category indicated by the title parameter. 
+*/
 public class PanelCreation {
     public static JPanel createPanel(String title, DrawingTools drawingTools) {
         JPanel panel = new JPanel();
