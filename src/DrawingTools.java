@@ -71,5 +71,4 @@ public class DrawingTools {
         CHAIR
         // Add more drawing modes as needed
     }
-    
 }

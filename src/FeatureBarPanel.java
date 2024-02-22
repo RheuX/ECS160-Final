@@ -5,7 +5,6 @@ public class FeatureBarPanel extends JPanel {
     public FeatureBarPanel(JPanel canvas) {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(200, 600));
-        ImageIcon image;
 
         // Drawing tools setup
         DrawingTools drawingTools = new DrawingTools(canvas);
@@ -59,10 +58,9 @@ public class FeatureBarPanel extends JPanel {
     private static void addButtonWithIcon(Container container, String buttonText, String iconFileName, int width, int height) {
         String iconDirectory = "../assets"; // Make it static
         String iconPath = iconDirectory + "/" + iconFileName; // Concatenate directory path and file name
-        ImageIcon icon = new ImageIcon(iconPath);
+        ImageIcon icon = new ImageIcon("../assets/cursor.png");
         JButton button = new JButton(buttonText, icon);
         button.setPreferredSize(new Dimension(width, height)); // Set preferred size for button
         container.add(button); // Add button to the specified container
     }
-
 }
