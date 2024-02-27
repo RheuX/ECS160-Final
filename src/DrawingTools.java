@@ -18,22 +18,20 @@ public class DrawingTools {
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (tempPoint1 == null) {
-                    tempPoint1 = e.getPoint();
-                } else {
-                    tempPoint2 = e.getPoint();
-                    drawObject(createStructuralObject(tempPoint1, tempPoint2));
-                    tempPoint1 = null; 
+                if (drawingMode == DrawingMode.NONE) {
+                    return;
                 }
-            }
-        });
 
-        // Implement mouse dragging for continuous drawing
-        canvas.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (drawingMode != DrawingMode.NONE) {
-                    fillSquare(e.getPoint());
+                if (isStructure()) {
+                    if (tempPoint1 == null) {
+                        tempPoint1 = e.getPoint();
+                    } else {
+                        tempPoint2 = e.getPoint();
+                        drawStructuralObject(createStructuralObject(tempPoint1, tempPoint2));
+                        tempPoint1 = null;
+                    }
+                } else {
+                    drawFurnitureObject(createFurnitureObject(e.getPoint(), 50, 100));
                 }
             }
         });
@@ -43,22 +41,19 @@ public class DrawingTools {
         this.drawingMode = mode;
     }
 
-    private void drawObject(StructuralObject object) {
+    private boolean isStructure() {
+        return drawingMode == DrawingMode.DOOR || drawingMode == DrawingMode.WALL || drawingMode == DrawingMode.WINDOW;
+    }
+
+    private void drawStructuralObject(StructuralObject object) {
         Graphics2D g2d = (Graphics2D) canvas.getGraphics();
         object.draw(g2d);
         g2d.dispose();
     }
 
-    private void fillSquare(Point point) {
-        // Snap the drawing to the grid
-        int gridSize = 30; // Adjust the size of the grid as needed
-        int snappedX = (point.x / gridSize) * gridSize;
-        int snappedY = (point.y / gridSize) * gridSize;
-    
-        // Draw different objects based on the drawing mode
+    private void drawFurnitureObject(FurnitureObject furnitureObject) {
         Graphics2D g2d = (Graphics2D) canvas.getGraphics();
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(snappedX, snappedY, gridSize, gridSize);
+        furnitureObject.draw(g2d);
         g2d.dispose();
     }
 
@@ -66,12 +61,25 @@ public class DrawingTools {
         switch (drawingMode) {
             case WALL:
                 return new Wall(startPoint, endPoint);
-            case WINDOW :
+            case WINDOW:
                 return new Window(startPoint, endPoint);
-            case DOOR :
-                return new Door(startPoint, endPoint); 
+            case DOOR:
+                return new Door(startPoint, endPoint);
             default:
-                return null;
+                throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
+        }
+    }
+
+    private FurnitureObject createFurnitureObject(Point point, int width, int height) {
+        switch (drawingMode) {
+            case BED:
+                return new Bed(point, width, height);
+            case DESK:
+                return new Desk(point, width, height);
+            case CHAIR:
+                return new Chair(point, width, height);
+            default:
+                throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
         }
     }
 
@@ -79,8 +87,9 @@ public class DrawingTools {
         NONE,
         WALL,
         WINDOW,
+        BED,
         DOOR,
-        TABLE,
+        DESK,
         CHAIR
         // Add more drawing modes as needed
     }
