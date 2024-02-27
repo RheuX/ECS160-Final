@@ -6,9 +6,11 @@ import java.awt.event.*;
 Creates a JMenuBar which will serve as the menu for file an canvas related actions. 
 */
 public class MenuBar extends JMenuBar {
-    public MenuBar() {
-        // Your menu bar setup code goes here
-        add(createMenuBar());
+    private MainCanvasPanel mainCanvasPanel;
+
+    public MenuBar(MainCanvasPanel mainCanvasPanel) {
+            this.mainCanvasPanel = mainCanvasPanel;
+            add(createMenuBar());
     }
 
     public JMenuBar createMenuBar() {
@@ -65,9 +67,11 @@ public class MenuBar extends JMenuBar {
         canvasMenu.add(resizeItem);
 
         JMenuItem zoomInItem = new JMenuItem("Zoom In");
+        zoomInItem.addActionListener(e -> mainCanvasPanel.zoom(0.25));
         canvasMenu.add(zoomInItem);
 
         JMenuItem zoomOutItem = new JMenuItem("Zoom Out");
+        zoomOutItem.addActionListener(e -> mainCanvasPanel.zoom(-0.25));
         canvasMenu.add(zoomOutItem);
 
         menuBar.add(fileMenu);

@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// @author ChatGPT
 public class PanelCreation {
     public static JPanel createPanel(String title, DrawingTools drawingTools) {
         JPanel panel = new JPanel();
@@ -11,8 +12,10 @@ public class PanelCreation {
             wallButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.WALL));
             structuralPanel.add(wallButton);
             JButton windowButton = new JButton("Window");
-            JButton doorButton = new JButton("Door");
+            windowButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.WINDOW));
             structuralPanel.add(windowButton);
+            JButton doorButton = new JButton("Door");
+            doorButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.DOOR));
             structuralPanel.add(doorButton);
 
             panel.add(structuralPanel, BorderLayout.CENTER);

@@ -1,27 +1,17 @@
-import java.awt.Point;
+import java.awt.*;
 
-public class Wall {
-    private Point startPoint;
-    private Point endPoint;
-
+// @author ChatGPT
+public class Wall extends StructuralObject {
     public Wall(Point startPoint, Point endPoint) {
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
+        super(startPoint, endPoint);
     }
 
-    public Point getStartPoint() {
-        return startPoint;
-    }
-
-    public void setStartPoint(Point startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public Point getEndPoint() {
-        return endPoint;
-    }
-
-    public void setEndPoint(Point endPoint) {
-        this.endPoint = endPoint;
+    @Override
+    public void draw(Graphics2D g2d) {
+        if (startPoint != null && endPoint != null) {
+            // Draw a thick solid line connecting the points
+            g2d.setStroke(new BasicStroke(10)); // Set thickness
+            g2d.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+        }
     }
 }

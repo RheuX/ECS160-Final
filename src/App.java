@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 public class App extends JFrame {
     public App() {
-        super("Simple Paint Application");
+        super("Simple Floor Planning Application");
         initUI();
     }
 
@@ -14,7 +14,7 @@ public class App extends JFrame {
 
         MainCanvasPanel mainCanvasPanel = new MainCanvasPanel();
         FeatureBarPanel featureBarPanel = new FeatureBarPanel(mainCanvasPanel);
-        MenuBar menuBar = new MenuBar();
+        MenuBar menuBar = new MenuBar(mainCanvasPanel);
 
         add(mainCanvasPanel, BorderLayout.CENTER);
         add(featureBarPanel, BorderLayout.WEST);
