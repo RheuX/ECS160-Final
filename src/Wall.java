@@ -1,7 +1,7 @@
 import java.awt.*;
 
 // @author ChatGPT
-public class Wall extends StructuralObject {
+public class Wall extends StructureObject {
     public Wall(Point startPoint, Point endPoint) {
         super(startPoint, endPoint);
     }

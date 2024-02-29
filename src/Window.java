@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 // @author ChatGPT
-public class Window extends StructuralObject {
+public class Window extends StructureObject {
     public Window(Point startPoint, Point endPoint) {
         super(startPoint, endPoint);
     }

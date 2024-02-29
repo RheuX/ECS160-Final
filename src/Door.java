@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 // @author ChatGPT
-public class Door extends StructuralObject {
+public class Door extends StructureObject {
     public Door(Point startPoint, Point endPoint) {
         super(startPoint, endPoint);
     }

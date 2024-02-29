@@ -6,11 +6,14 @@ import javax.swing.*;
 public class DrawingTools {
     private JPanel canvas;
     private DrawingMode drawingMode = DrawingMode.NONE;
+    private boolean deleteMode = false; // Flag for delete mode
     private Point tempPoint1;
     private Point tempPoint2;
+    private ManageCanvas manageCanvas;
 
-    public DrawingTools(JPanel canvas) {
+    public DrawingTools(JPanel canvas, ManageCanvas manageCanvas) {
         this.canvas = canvas;
+        this.manageCanvas = manageCanvas;
         setupDrawing();
     }
 
@@ -27,11 +30,15 @@ public class DrawingTools {
                         tempPoint1 = e.getPoint();
                     } else {
                         tempPoint2 = e.getPoint();
-                        drawStructuralObject(createStructuralObject(tempPoint1, tempPoint2));
+                        StructureObject object = createStructuralObject(tempPoint1, tempPoint2);
+                        drawStructuralObject(object);
+                        manageCanvas.addStructure(object); // Add structure to ManageCanvas
                         tempPoint1 = null;
                     }
                 } else {
-                    drawFurnitureObject(createFurnitureObject(e.getPoint(), 50, 100));
+                    FurnitureObject furnitureObject = createFurnitureObject(e.getPoint(), 50, 100);
+                    drawFurnitureObject(furnitureObject);
+                    manageCanvas.addFurniture(furnitureObject); // Add furniture to ManageCanvas
                 }
             }
         });
@@ -41,11 +48,54 @@ public class DrawingTools {
         this.drawingMode = mode;
     }
 
+    public void setDeleteMode(boolean deleteMode) {
+        this.deleteMode = deleteMode;
+    }
+
     private boolean isStructure() {
         return drawingMode == DrawingMode.DOOR || drawingMode == DrawingMode.WALL || drawingMode == DrawingMode.WINDOW;
     }
 
-    private void drawStructuralObject(StructuralObject object) {
+    private void deleteObject(Point point) {
+        if (deleteMode) {
+            // Iterate over objects in canvas and check if point is inside any object
+            for (StructureObject structureObject : manageCanvas.getAllStructures()) {
+                if (isPointInsideObject(point, structureObject)) {
+                    manageCanvas.deleteStructure(structureObject);
+                    redrawCanvas();
+                    return; // Exit the method once an object is deleted
+                }
+            }
+    
+            for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
+                if (isPointInsideObject(point, furnitureObject)) {
+                    manageCanvas.deleteFurniture(furnitureObject);
+                    redrawCanvas();
+                    return; // Exit the method once an object is deleted
+                }
+            }
+        }
+    }
+    
+    private boolean isPointInsideObject(Point point, StructureObject structureObject) {
+        // Check if the point is inside the boundaries of the structureObject
+        // Implement this method based on your specific object shapes and properties
+        return false; // Placeholder return, replace with actual implementation
+    }
+    
+    private boolean isPointInsideObject(Point point, FurnitureObject furnitureObject) {
+        // Check if the point is inside the boundaries of the furnitureObject
+        // Implement this method based on your specific object shapes and properties
+        return false; // Placeholder return, replace with actual implementation
+    }
+    
+    private void redrawCanvas() {
+        // Redraw the canvas after deleting an object
+        // You might need to call methods to clear the canvas and redraw all objects
+        // Implement this method based on your canvas implementation
+    }
+    
+    private void drawStructuralObject(StructureObject object) {
         Graphics2D g2d = (Graphics2D) canvas.getGraphics();
         object.draw(g2d);
         g2d.dispose();
@@ -57,7 +107,7 @@ public class DrawingTools {
         g2d.dispose();
     }
 
-    private StructuralObject createStructuralObject(Point startPoint, Point endPoint) {
+    private StructureObject createStructuralObject(Point startPoint, Point endPoint) {
         switch (drawingMode) {
             case WALL:
                 return new Wall(startPoint, endPoint);
@@ -83,7 +133,7 @@ public class DrawingTools {
             case SHOWER:
                 return new Shower(point, 40, 80);
             case SINK:
-                return new Sink(point, width, height);
+                return new Sink(point, 60, 45);
             default:
                 throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
         }
@@ -91,6 +141,11 @@ public class DrawingTools {
 
     public enum DrawingMode {
         NONE,
+        DELETE,
+        RESIZE,
+        ROTATE_LEFT,
+        ROTATE_RIGHT,
+        ROTATE_FLIP,
         WALL,
         WINDOW,
         BED,

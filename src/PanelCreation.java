@@ -46,12 +46,12 @@ public class PanelCreation {
             panel.add(structuralPanel, BorderLayout.CENTER);
         } else if (title.equals("Kitchen Features")) {
             JPanel structuralPanel = new JPanel(new GridLayout(3, 1));
-            JButton sinkButton = new JButton("Sink on Counter");
+            JButton sinkButton = new JButton("Sink with Counter");
             JButton counterButton = new JButton("Counter");
-            JButton washingMachineButton = new JButton("Refrigerator");
+            JButton refrigeratorButton = new JButton("Refrigerator");
             structuralPanel.add(sinkButton);
             structuralPanel.add(counterButton);
-            structuralPanel.add(washingMachineButton);
+            structuralPanel.add(refrigeratorButton);
 
             panel.add(structuralPanel, BorderLayout.CENTER);
         } else if (title.equals("Living Room Features")) {

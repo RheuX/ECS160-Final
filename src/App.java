@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
 
-
 public class App extends JFrame {
     public App() {
         super("Simple Floor Planning Application");
@@ -13,7 +12,9 @@ public class App extends JFrame {
         setLayout(new BorderLayout());
 
         MainCanvasPanel mainCanvasPanel = new MainCanvasPanel();
-        FeatureBarPanel featureBarPanel = new FeatureBarPanel(mainCanvasPanel);
+        ManageCanvas manageCanvas = new ManageCanvas(); // Create a ManageCanvas instance
+        FeatureBarPanel featureBarPanel = new FeatureBarPanel(mainCanvasPanel, manageCanvas); // Pass ManageCanvas instance
+
         MenuBar menuBar = new MenuBar(mainCanvasPanel);
 
         add(mainCanvasPanel, BorderLayout.CENTER);
