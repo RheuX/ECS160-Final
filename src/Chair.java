@@ -1,12 +1,12 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 public class Chair extends FurnitureObject {
-    private static final int LEG_WIDTH = 10; // Width of chair legs
-    private static final int LEG_HEIGHT = 40; // Height of chair legs
-    private static final int BACKREST_WIDTH = 20; // Width of chair backrest
-    private static final int BACKREST_HEIGHT = 80; // Height of chair backrest
+    private static final Color OUTLINE_COLOR = Color.BLACK; // Color of the outline
 
     public Chair(Point position, int width, int height) {
         super(position, width, height);
@@ -14,24 +14,44 @@ public class Chair extends FurnitureObject {
 
     @Override
     public void draw(Graphics2D g2d) {
-        // Calculate the position and dimensions of the chair to make it centered around the mouse click position
         int x = (int) startPoint.getX() - width / 2;
         int y = (int) startPoint.getY() - height / 2;
 
-        // Draw the base of the chair
-        g2d.setColor(new Color(139, 69, 19)); // Brown color
-        g2d.fillRect(x, y + height - LEG_HEIGHT, width, LEG_HEIGHT);
+        // Draw square with circular edges
+        int cornerArcSize = width / 4; // Adjust as needed for the curve size
+        g2d.setColor(Color.GRAY);
+        g2d.fillRoundRect(x, y, width, height, cornerArcSize, cornerArcSize);
 
-        // Draw the chair backrest
-        int backrestX1 = x + width / 4;
-        int backrestX2 = x + width * 3 / 4 - BACKREST_WIDTH;
-        int backrestY = y + height - LEG_HEIGHT - BACKREST_HEIGHT;
-        g2d.fillRect(backrestX1, backrestY, BACKREST_WIDTH, BACKREST_HEIGHT);
-        g2d.fillRect(backrestX2, backrestY, BACKREST_WIDTH, BACKREST_HEIGHT);
+        // Draw outline for the square with circular edges
+        g2d.setColor(OUTLINE_COLOR);
+        g2d.drawRoundRect(x, y, width, height, cornerArcSize, cornerArcSize);
 
-        // Draw the chair legs
-        g2d.setColor(Color.BLACK); // Black color for legs
-        g2d.fillRect(x, y + height - LEG_HEIGHT, LEG_WIDTH, LEG_HEIGHT);
-        g2d.fillRect(x + width - LEG_WIDTH, y + height - LEG_HEIGHT, LEG_WIDTH, LEG_HEIGHT);
+        // Draw crescent moon shape
+        int crescentWidth = width / 2;
+        int crescentHeight = height;
+        int crescentX = x - crescentWidth / 2;
+        int crescentY = y;
+        g2d.setColor(Color.LIGHT_GRAY);
+        drawCrescent(g2d, crescentX, crescentY, crescentWidth, crescentHeight);
+
+        // Draw outline for the crescent moon shape
+        g2d.setColor(OUTLINE_COLOR);
+        g2d.draw(drawCrescent(g2d, crescentX, crescentY, crescentWidth, crescentHeight));
+    }
+
+    // Method to draw a crescent moon shape
+    private Area drawCrescent(Graphics2D g2d, int x, int y, int width, int height) {
+        // Create two arcs to form the crescent moon shape
+        Arc2D outerArc = new Arc2D.Double(x, y, width, height, 90, 180, Arc2D.OPEN);
+        Arc2D innerArc = new Arc2D.Double(x + width / 4, y, width / 2, height, 90, 180, Arc2D.OPEN);
+
+        // Create areas from the arcs
+        Area area = new Area(outerArc);
+        area.subtract(new Area(innerArc));
+
+        // Fill the crescent moon shape
+        g2d.fill(area);
+
+        return area;
     }
 }

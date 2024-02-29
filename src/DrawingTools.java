@@ -73,11 +73,17 @@ public class DrawingTools {
     private FurnitureObject createFurnitureObject(Point point, int width, int height) {
         switch (drawingMode) {
             case BED:
-                return new Bed(point, width, height);
+                return new Bed(point, 100, 150);
             case DESK:
                 return new Desk(point, width, height);
             case CHAIR:
-                return new Chair(point, width, height);
+                return new Chair(point, 25, 25);
+            case TOILET:
+                return new Toilet(point, 25, 25);
+            case SHOWER:
+                return new Shower(point, 40, 80);
+            case SINK:
+                return new Sink(point, width, height);
             default:
                 throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
         }
@@ -90,7 +96,10 @@ public class DrawingTools {
         BED,
         DOOR,
         DESK,
-        CHAIR
+        CHAIR,
+        TOILET,
+        SHOWER,
+        SINK,
         // Add more drawing modes as needed
     }
 }
