@@ -49,27 +49,33 @@ public class PanelCreation {
             JButton sinkButton = new JButton("Sink with Counter");
             JButton counterButton = new JButton("Counter");
             JButton refrigeratorButton = new JButton("Refrigerator");
+            refrigeratorButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.REFRIGERATOR));
+            structuralPanel.add(refrigeratorButton);
             structuralPanel.add(sinkButton);
             structuralPanel.add(counterButton);
-            structuralPanel.add(refrigeratorButton);
 
             panel.add(structuralPanel, BorderLayout.CENTER);
         } else if (title.equals("Living Room Features")) {
             JPanel structuralPanel = new JPanel(new GridLayout(3, 1));
             JButton couchButton = new JButton("Couch");
-            JButton sofaButton = new JButton("Sofa");
-            JButton tvButton = new JButton("TV");
+            couchButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.COUCH));
             structuralPanel.add(couchButton);
+            JButton sofaButton = new JButton("Sofa");
+            sofaButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.SOFA));
             structuralPanel.add(sofaButton);
+            JButton tvButton = new JButton("TV");
+            tvButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.TV));
             structuralPanel.add(tvButton);
 
             panel.add(structuralPanel, BorderLayout.CENTER);
         } else if (title.equals("Dining Room Features")) {
             JPanel structuralPanel = new JPanel(new GridLayout(2, 1));
             JButton tableButton = new JButton("Table");
-            JButton chairButton = new JButton("Chair");
+            tableButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.TABLE));
             structuralPanel.add(tableButton);
-            structuralPanel.add(chairButton);
+            JButton diningChairButton = new JButton("Chair");
+            diningChairButton.addActionListener(e -> drawingTools.setDrawingMode(DrawingTools.DrawingMode.DININGCHAIR));
+            structuralPanel.add(diningChairButton);
 
             panel.add(structuralPanel, BorderLayout.CENTER);
         } else {

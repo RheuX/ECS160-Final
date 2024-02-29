@@ -134,6 +134,18 @@ public class DrawingTools {
                 return new Shower(point, 40, 80);
             case SINK:
                 return new Sink(point, 60, 45);
+            case TABLE:
+                return new Table(point, width+20, height+40);
+            case DININGCHAIR:
+                return new DiningChair(point, 25, 25); 
+            case REFRIGERATOR:
+                return new Refrigerator(point, 50, 50);
+            case SOFA:
+                return new Sofa(point, width, height);
+            case TV:
+                return new TV(point, width, height);
+            case COUCH:
+                return new Couch(point, 50, 40);
             default:
                 throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
         }
@@ -155,6 +167,12 @@ public class DrawingTools {
         TOILET,
         SHOWER,
         SINK,
+        TABLE,
+        DININGCHAIR,
+        REFRIGERATOR,
+        TV,
+        SOFA,
+        COUCH
         // Add more drawing modes as needed
     }
 }
