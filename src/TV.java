@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.BasicStroke;
 
 public class TV extends FurnitureObject {
     private static final Color DARK_GRAY_COLOR = new Color(64, 64, 64); // Dark gray color for the TV
@@ -36,5 +37,13 @@ public class TV extends FurnitureObject {
         // Draw the outline for the base
         g2d.setColor(Color.BLACK);
         g2d.drawRect(baseX, baseY, baseWidth, baseHeight);
+
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, tvBodyWidth + 6, tvBodyHeight + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }

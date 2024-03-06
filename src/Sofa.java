@@ -1,10 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.BasicStroke;
 
 public class Sofa extends FurnitureObject {
     private static final Color TAN_COLOR = new Color(210, 180, 140); // Neutral toned tan color
-    private static final Color OUTLINE_COLOR = Color.BLACK;
 
     public Sofa(Point position, int width, int height) {
         super(position, width, height);
@@ -35,5 +35,13 @@ public class Sofa extends FurnitureObject {
         int armHeight = height / 8; // Adjust as needed
         g2d.drawRect(x + width / 5, y, armWidth, armHeight); // Upper arm
         g2d.drawRect(x + width / 5, y + height - armHeight, armWidth, armHeight); // Lower arm
+
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, width + 6, height + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }

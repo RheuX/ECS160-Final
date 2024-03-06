@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.Line2D;
 
 // @author ChatGPT
 public class Window extends StructureObject {

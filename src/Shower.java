@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -8,8 +9,6 @@ public class Shower extends FurnitureObject {
     private static final double OVAL_SCALE_FACTOR = 0.8; // Scale factor for the oval
     private static final int PIPE_WIDTH = 10; // Width of the pipe
     private static final int PIPE_HEIGHT = 30; // Height of the pipe
-    private static final int PIPE_OFFSET_X = BASE_WIDTH / 2 - PIPE_WIDTH / 2; // X offset for the pipe
-    private static final Color OUTLINE_COLOR = Color.BLACK; // Color of the outline
     private static final int ROUNDING_ARC_WIDTH = 10; // Width of rounding arc
     private static final int ROUNDING_ARC_HEIGHT = 10; // Height of rounding arc
 
@@ -56,5 +55,13 @@ public class Shower extends FurnitureObject {
         // Draw outline for the pipe
         g2d.setColor(OUTLINE_COLOR);
         g2d.drawRect(pipeX, pipeY, PIPE_WIDTH, PIPE_HEIGHT);
+
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, BASE_WIDTH + 6, BASE_HEIGHT + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }

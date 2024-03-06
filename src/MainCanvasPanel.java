@@ -8,11 +8,11 @@ public class MainCanvasPanel extends JPanel {
     private BufferedImage canvas;
     private int originalGridSize = 30; // Size of each grid cell
     private double zoomFactor = 1.0;
+    private int scaledGridSize = (int) (originalGridSize * zoomFactor);
     private double ZOOM_INCREMENT = 0.1;
 
     public MainCanvasPanel() {
         canvas = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-        //clearCanvas();
         setPreferredSize(new Dimension(800, 600));
         addMouseWheelListener(new ZoomMouseWheelListener());
     }
@@ -36,17 +36,13 @@ public class MainCanvasPanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Draw grid lines with a white background
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         g2d.setColor(Color.BLACK);
 
-        int width = getWidth();
-        int height = getHeight();
-
-        // Calculate the scaled grid size based on the original grid size and zoom factor
-        int scaledGridSize = (int) (originalGridSize * zoomFactor);
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
 
         // Draw vertical grid lines
         for (int x = 0; x <= width; x += scaledGridSize) {
@@ -58,8 +54,9 @@ public class MainCanvasPanel extends JPanel {
             g2d.drawLine(0, y, width, y);
         }
 
-        // Reset the transformation after drawing
-        g2d.dispose();
+        g2d.drawImage(DrawingTools.drawAllFurniture(this), 0, 0, null);
+
+        g2d.dispose(); 
     }
 
     public void zoom(double zoomDelta) {
@@ -71,12 +68,24 @@ public class MainCanvasPanel extends JPanel {
         int originalGridSize = 30;
         int scaledGridSize = (int) (originalGridSize * zoomFactor);
         int gridSize = Math.min(scaledGridSize, getWidth() / 2); // Limit to half of the panel size
-        setGridSize(gridSize);
+        setOriginalGridSize(gridSize);
         repaint();
     }
 
-    private void setGridSize(int gridSize) {
+    private void setOriginalGridSize(int gridSize) {
         originalGridSize = gridSize;
+    }
+
+    public int getOriginalGridSize() {
+        return originalGridSize;
+    }
+
+    public double getZoomFactor() {
+        return zoomFactor;
+    }
+
+    public int getScaledGridSize() {
+        return scaledGridSize;
     }
 
     public void clearCanvas() {

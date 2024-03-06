@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -37,5 +38,12 @@ public class Refrigerator extends FurnitureObject {
         g2d.fillRect(doorX, doorY, doorWidth, doorHeight);
         g2d.setColor(OUTLINE_COLOR);
         g2d.drawRect(doorX, doorY, doorWidth, doorHeight);
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(FurnitureObject.DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, width + doorWidth + 6, height + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }

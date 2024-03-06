@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.BasicStroke;
 
 public class Toilet extends FurnitureObject {
     private static final int BASE_WIDTH = 20; // Width of the toilet base
@@ -8,7 +9,6 @@ public class Toilet extends FurnitureObject {
     private static final int CIRCLE_RADIUS = 15; // Radius of the larger circle
     private static final int SMALL_CIRCLE_RADIUS = 7; // Radius of the smaller circle
     private static final int CIRCLE_OVERLAP = (int) (BASE_WIDTH / 3.0); // Amount of overlap for the circles into the rectangle
-    private static final Color OUTLINE_COLOR = Color.BLACK; // Color of the outline
 
     public Toilet(Point position, int width, int height) {
         super(position, width, height);
@@ -51,5 +51,13 @@ public class Toilet extends FurnitureObject {
         // Draw outline for the base
         g2d.setColor(OUTLINE_COLOR);
         g2d.drawRect(x, y, BASE_WIDTH, BASE_HEIGHT);
+
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, BASE_WIDTH + CIRCLE_RADIUS + SMALL_CIRCLE_RADIUS + 6, BASE_HEIGHT + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }

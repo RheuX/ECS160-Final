@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -9,23 +10,32 @@ public class DrawingTools {
     private boolean deleteMode = false; // Flag for delete mode
     private Point tempPoint1;
     private Point tempPoint2;
-    private ManageCanvas manageCanvas;
+    private static ManageCanvas manageCanvas;
 
     public DrawingTools(JPanel canvas, ManageCanvas manageCanvas) {
         this.canvas = canvas;
-        this.manageCanvas = manageCanvas;
+        DrawingTools.manageCanvas = manageCanvas; 
         setupDrawing();
     }
 
     private void setupDrawing() {
         canvas.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (drawingMode == DrawingMode.NONE) {
-                    return;
-                }
-
-                if (isStructure()) {
+                    Point clickPoint = e.getPoint();
+                    // Iterate through the list of couches to check if any is clicked
+                    for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
+                        if (furniture.contains(clickPoint)) {
+                            // Toggle the selected state of the couch
+                            //System.out.println("Selected Object: " + furniture.getClass().getName());
+                            furniture.setSelected(!furniture.isSelected());
+                            // Redraw the canvas to update the selected state
+                            redrawCanvas();
+                            break; // Break the loop after handling the first clicked couch
+                        }
+                    }
+                } else if (isStructure()) {
                     if (tempPoint1 == null) {
                         tempPoint1 = e.getPoint();
                     } else {
@@ -34,17 +44,19 @@ public class DrawingTools {
                         drawStructuralObject(object);
                         manageCanvas.addStructure(object); // Add structure to ManageCanvas
                         tempPoint1 = null;
+                        tempPoint2 = null;
                     }
-                } else {
+                } else if (isFurniture()) {
                     FurnitureObject furnitureObject = createFurnitureObject(e.getPoint(), 50, 100);
                     drawFurnitureObject(furnitureObject);
                     manageCanvas.addFurniture(furnitureObject); // Add furniture to ManageCanvas
-                }
+                } 
             }
         });
     }
 
     public void setDrawingMode(DrawingMode mode) {
+        System.out.println("Drawing Mode =  " + mode);
         this.drawingMode = mode;
     }
 
@@ -54,6 +66,10 @@ public class DrawingTools {
 
     private boolean isStructure() {
         return drawingMode == DrawingMode.DOOR || drawingMode == DrawingMode.WALL || drawingMode == DrawingMode.WINDOW;
+    }
+
+    private boolean isFurniture() {
+        return (!isStructure() && drawingMode != DrawingMode.NONE);
     }
 
     private void deleteObject(Point point) {
@@ -93,6 +109,7 @@ public class DrawingTools {
         // Redraw the canvas after deleting an object
         // You might need to call methods to clear the canvas and redraw all objects
         // Implement this method based on your canvas implementation
+        canvas.repaint(); 
     }
     
     private void drawStructuralObject(StructureObject object) {
@@ -101,7 +118,20 @@ public class DrawingTools {
         g2d.dispose();
     }
 
-    private void drawFurnitureObject(FurnitureObject furnitureObject) {
+    static BufferedImage drawAllFurniture(MainCanvasPanel canvas) {
+        BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+    
+        // Draw all furniture objects
+        for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
+            furniture.draw(g2d);
+        }
+    
+        g2d.dispose();
+        return image;
+    }
+
+    public void drawFurnitureObject(FurnitureObject furnitureObject) {
         Graphics2D g2d = (Graphics2D) canvas.getGraphics();
         furnitureObject.draw(g2d);
         g2d.dispose();

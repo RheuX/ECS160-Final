@@ -1,11 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.BasicStroke;
 
 public class Sink extends FurnitureObject {
-    private static final Color OUTLINE_COLOR = Color.BLACK; // Color of the outline
 
     public Sink(Point position, int width, int height) {
         super(position, width, height);
@@ -73,5 +72,13 @@ public class Sink extends FurnitureObject {
         // Draw outline for the pipe
         g2d.setColor(OUTLINE_COLOR);
         g2d.drawRect(pipeX, pipeY, pipeWidth, pipeHeight);
+
+        if (isSelected()) {
+            // Draw the dotted outline if the couch is selected
+            g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
+            g2d.drawRect(x - 3, y - 3, adjustedWidth + 6, sinkHeight + pipeHeight + 6);
+            g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
+        }
     }
 }
