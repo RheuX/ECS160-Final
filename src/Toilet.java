@@ -4,11 +4,9 @@ import java.awt.Point;
 import java.awt.BasicStroke;
 
 public class Toilet extends FurnitureObject {
-    private static final int BASE_WIDTH = 20; // Width of the toilet base
-    private static final int BASE_HEIGHT = 50; // Height of the toilet base
     private static final int CIRCLE_RADIUS = 15; // Radius of the larger circle
     private static final int SMALL_CIRCLE_RADIUS = 7; // Radius of the smaller circle
-    private static final int CIRCLE_OVERLAP = (int) (BASE_WIDTH / 3.0); // Amount of overlap for the circles into the rectangle
+    private static int CIRCLE_OVERLAP;
 
     public Toilet(Point position, int width, int height) {
         super(position, width, height);
@@ -16,13 +14,15 @@ public class Toilet extends FurnitureObject {
 
     @Override
     public void draw(Graphics2D g2d) {
+
+        CIRCLE_OVERLAP = (int) (width / 3.0);
         // Calculate the position and dimensions of the toilet base to center it around the mouse click position
-        int x = (int) startPoint.getX() - BASE_WIDTH / 2;
-        int y = (int) startPoint.getY() - BASE_HEIGHT / 2;
+        int x = (int) startPoint.getX() - width / 2;
+        int y = (int) startPoint.getY() - height / 2;
 
         // Calculate the position and dimensions of the larger circle to overlap into the rectangle
-        int circleX = x + BASE_WIDTH - CIRCLE_OVERLAP; // Adjusted to overlap into the rectangle
-        int circleY = y + BASE_HEIGHT / 2 - CIRCLE_RADIUS;
+        int circleX = x + width - CIRCLE_OVERLAP; // Adjusted to overlap into the rectangle
+        int circleY = y + height / 2 - CIRCLE_RADIUS;
 
         // Draw the larger circle
         g2d.setColor(Color.GRAY);
@@ -46,17 +46,17 @@ public class Toilet extends FurnitureObject {
 
         // Draw the toilet base (rectangle)
         g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRect(x, y, BASE_WIDTH, BASE_HEIGHT);
+        g2d.fillRect(x, y, width, height);
 
         // Draw outline for the base
         g2d.setColor(OUTLINE_COLOR);
-        g2d.drawRect(x, y, BASE_WIDTH, BASE_HEIGHT);
+        g2d.drawRect(x, y, width, height);
 
         if (isSelected()) {
             // Draw the dotted outline if the couch is selected
             g2d.setStroke(DOTTED_STROKE);
             g2d.setColor(OUTLINE_COLOR);
-            g2d.drawRect(x - 3, y - 3, BASE_WIDTH + CIRCLE_RADIUS + SMALL_CIRCLE_RADIUS + 6, BASE_HEIGHT + 6);
+            g2d.drawRect(x - 3, y - 3, width + CIRCLE_RADIUS + SMALL_CIRCLE_RADIUS + 6, height + 6);
             g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
         }
     }

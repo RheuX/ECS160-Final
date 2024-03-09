@@ -19,7 +19,7 @@ public class FeatureBarPanel extends JPanel {
         // Tools panel with icons
         JPanel toolsPanel = new JPanel(new GridLayout(3, 2));
         addButtonToPanel(toolsPanel, createDrawingButton("Mouse", "none.png", DrawingTools.DrawingMode.NONE, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Delete", "delete.png", DrawingTools.DrawingMode.DELETE, drawingTools));
+        addButtonToPanel(toolsPanel, createDrawingButton("Delete", "delete.png", drawingTools));
         addButtonToPanel(toolsPanel, createDrawingButton("Resize", "resize.png", DrawingTools.DrawingMode.RESIZE, drawingTools));
         addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Left", "rotate-left.png", DrawingTools.DrawingMode.ROTATE_LEFT, drawingTools));
         addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Right", "rotate-right.png", DrawingTools.DrawingMode.ROTATE_RIGHT, drawingTools));
@@ -59,6 +59,16 @@ public class FeatureBarPanel extends JPanel {
         JButton button = new JButton(buttonText, icon);
         button.setPreferredSize(new Dimension(button_width, button_height));
         button.addActionListener(e -> drawingTools.setDrawingMode(mode));
+        return button;
+    }
+
+    private JButton createDrawingButton(String buttonText, String iconFileName, DrawingTools drawingTools) {
+        String iconDirectory = "../assets";
+        String iconPath = iconDirectory + "/" + iconFileName;
+        ImageIcon icon = new ImageIcon(iconPath);
+        JButton button = new JButton(buttonText, icon);
+        button.setPreferredSize(new Dimension(button_width, button_height));
+        button.addActionListener(e -> drawingTools.deleteSelectedObjects());
         return button;
     }
 

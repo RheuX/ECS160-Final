@@ -22,46 +22,49 @@ public class DrawingTools {
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (drawingMode == DrawingMode.NONE) {
-                    Point clickPoint = e.getPoint();
-                    // Iterate through the list of couches to check if any is clicked
-                    for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
-                        if (furniture.contains(clickPoint)) {
-                            // Toggle the selected state of the couch
-                            //System.out.println("Selected Object: " + furniture.getClass().getName());
-                            furniture.setSelected(!furniture.isSelected());
-                            // Redraw the canvas to update the selected state
-                            redrawCanvas();
-                            break; // Break the loop after handling the first clicked couch
-                        }
-                    }
-                } else if (isStructure()) {
-                    if (tempPoint1 == null) {
-                        tempPoint1 = e.getPoint();
-                    } else {
-                        tempPoint2 = e.getPoint();
-                        StructureObject object = createStructuralObject(tempPoint1, tempPoint2);
-                        drawStructuralObject(object);
-                        manageCanvas.addStructure(object); // Add structure to ManageCanvas
-                        tempPoint1 = null;
-                        tempPoint2 = null;
-                    }
-                } else if (isFurniture()) {
-                    FurnitureObject furnitureObject = createFurnitureObject(e.getPoint(), 50, 100);
-                    drawFurnitureObject(furnitureObject);
-                    manageCanvas.addFurniture(furnitureObject); // Add furniture to ManageCanvas
-                } 
+                handleMousePress(e);
             }
         });
     }
 
-    public void setDrawingMode(DrawingMode mode) {
-        System.out.println("Drawing Mode =  " + mode);
-        this.drawingMode = mode;
+    private void handleMousePress(MouseEvent e) {
+        Point clickPoint = e.getPoint();
+        if (drawingMode == DrawingMode.NONE) {
+            handleFurnitureSelection(clickPoint);
+        } else if (isStructure()) {
+            handleStructureCreation(clickPoint);
+        } else if (isFurniture()) {
+            handleFurnitureCreation(clickPoint);
+        }
     }
 
-    public void setDeleteMode(boolean deleteMode) {
-        this.deleteMode = deleteMode;
+    private void handleFurnitureSelection(Point clickPoint) {
+        for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
+            if (furniture.contains(clickPoint)) {
+                furniture.setSelected(!furniture.isSelected());
+                redrawCanvas();
+                break;
+            }
+        }
+    }
+
+    private void handleStructureCreation(Point clickPoint) {
+        if (tempPoint1 == null) {
+            tempPoint1 = clickPoint;
+        } else {
+            tempPoint2 = clickPoint;
+            StructureObject object = createStructuralObject(tempPoint1, tempPoint2);
+            drawStructuralObject(object);
+            manageCanvas.addStructure(object);
+            tempPoint1 = null;
+            tempPoint2 = null;
+        }
+    }
+
+    private void handleFurnitureCreation(Point clickPoint) {
+        FurnitureObject furnitureObject = createFurnitureObject(clickPoint, 50, 100);
+        drawFurnitureObject(furnitureObject);
+        manageCanvas.addFurniture(furnitureObject);
     }
 
     private boolean isStructure() {
@@ -72,37 +75,28 @@ public class DrawingTools {
         return (!isStructure() && drawingMode != DrawingMode.NONE);
     }
 
-    private void deleteObject(Point point) {
-        if (deleteMode) {
-            // Iterate over objects in canvas and check if point is inside any object
-            for (StructureObject structureObject : manageCanvas.getAllStructures()) {
-                if (isPointInsideObject(point, structureObject)) {
-                    manageCanvas.deleteStructure(structureObject);
-                    redrawCanvas();
-                    return; // Exit the method once an object is deleted
-                }
-            }
+
+    public void setDrawingMode(DrawingMode mode) {
+        System.out.println("Drawing Mode =  " + mode);
+        this.drawingMode = mode;
+    }
     
-            for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
-                if (isPointInsideObject(point, furnitureObject)) {
-                    manageCanvas.deleteFurniture(furnitureObject);
-                    redrawCanvas();
-                    return; // Exit the method once an object is deleted
-                }
+    public void deleteSelectedObjects() {
+        // Iterate over objects in canvas and delete selected ones
+        for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
+            if (furnitureObject.isSelected()) {
+                manageCanvas.deleteFurniture(furnitureObject);
             }
         }
-    }
     
-    private boolean isPointInsideObject(Point point, StructureObject structureObject) {
-        // Check if the point is inside the boundaries of the structureObject
-        // Implement this method based on your specific object shapes and properties
-        return false; // Placeholder return, replace with actual implementation
-    }
+        // for (StructureObject structureObject : manageCanvas.getAllStructures()) {
+        //     if (structureObject.isSelected()) {
+        //         manageCanvas.deleteStructure(structureObject);
+        //     }
+        // }
     
-    private boolean isPointInsideObject(Point point, FurnitureObject furnitureObject) {
-        // Check if the point is inside the boundaries of the furnitureObject
-        // Implement this method based on your specific object shapes and properties
-        return false; // Placeholder return, replace with actual implementation
+        // Redraw canvas after deletion
+        redrawCanvas();
     }
     
     private void redrawCanvas() {
@@ -159,7 +153,7 @@ public class DrawingTools {
             case CHAIR:
                 return new Chair(point, 25, 25);
             case TOILET:
-                return new Toilet(point, 25, 25);
+                return new Toilet(point, 20, 50);
             case SHOWER:
                 return new Shower(point, 40, 80);
             case SINK:

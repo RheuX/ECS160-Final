@@ -42,5 +42,11 @@ public abstract class FurnitureObject {
         return (point.getX() >= x && point.getX() <= x + width && point.getY() >= y && point.getY() <= y + height);
     }
 
+    public Rectangle getBounds() {
+        int x = (int) startPoint.getX() - width / 2;
+        int y = (int) startPoint.getY() - height / 2;
+        return new Rectangle(x, y, width, height);
+    }
+
     public abstract void draw(Graphics2D g2d);
 }
