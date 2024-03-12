@@ -6,11 +6,13 @@ import java.awt.event.*;
 Creates a JMenuBar which will serve as the menu for file an canvas related actions. 
 */
 public class MenuBar extends JMenuBar {
-    private MainCanvasPanel mainCanvasPanel;
+    private final MainCanvasPanel mainCanvasPanel;
+    private final CommandManager commandManager;
 
-    public MenuBar(MainCanvasPanel mainCanvasPanel) {
-            this.mainCanvasPanel = mainCanvasPanel;
-            add(createMenuBar());
+    public MenuBar(MainCanvasPanel mainCanvasPanel, CommandManager commandManager) {
+        this.mainCanvasPanel = mainCanvasPanel;
+        this.commandManager = commandManager;
+        add(createMenuBar());
     }
 
     public JMenuBar createMenuBar() {
@@ -40,8 +42,8 @@ public class MenuBar extends JMenuBar {
         JMenu editMenu = new JMenu("Edit");
 
         JMenuItem undoItem = new JMenuItem("Undo");
-        undoItem.setMnemonic(KeyEvent.VK_Z);
         undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+        undoItem.addActionListener(e -> undoAction()); // Add ActionListener for Undo
         editMenu.add(undoItem);
 
         JMenuItem redoItem = new JMenuItem("Redo");
@@ -81,4 +83,14 @@ public class MenuBar extends JMenuBar {
 
         return menuBar;
     }
+
+    private void undoAction() {
+        if (commandManager.canUndo()) {
+            commandManager.undo(); // Call undo method from CommandManager
+            mainCanvasPanel.repaint(); // Repaint canvas after undo
+        } else {
+            JOptionPane.showMessageDialog(null, "Nothing to undo", "Undo", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
 }

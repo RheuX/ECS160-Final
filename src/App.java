@@ -13,9 +13,10 @@ public class App extends JFrame {
 
         MainCanvasPanel mainCanvasPanel = new MainCanvasPanel();
         ManageCanvas manageCanvas = new ManageCanvas(); // Create a ManageCanvas instance
-        FeatureBarPanel featureBarPanel = new FeatureBarPanel(mainCanvasPanel, manageCanvas); // Pass ManageCanvas instance
+        CommandManager commandManager = new CommandManager();
+        FeatureBarPanel featureBarPanel = new FeatureBarPanel(mainCanvasPanel, manageCanvas, commandManager); // Pass ManageCanvas instance
 
-        MenuBar menuBar = new MenuBar(mainCanvasPanel);
+        MenuBar menuBar = new MenuBar(mainCanvasPanel, commandManager);
 
         add(mainCanvasPanel, BorderLayout.CENTER);
         add(featureBarPanel, BorderLayout.WEST);

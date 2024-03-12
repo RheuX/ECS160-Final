@@ -5,12 +5,12 @@ public class FeatureBarPanel extends JPanel {
     private static final int button_width = 80;
     private static final int button_height = 40;
 
-    public FeatureBarPanel(JPanel canvas, ManageCanvas manageCanvas) {
+    public FeatureBarPanel(JPanel canvas, ManageCanvas manageCanvas, CommandManager commandManager) {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(200, 600));
 
         // Drawing tools setup
-        DrawingTools drawingTools = new DrawingTools(canvas, manageCanvas);
+        DrawingTools drawingTools = new DrawingTools(canvas, manageCanvas, commandManager);
 
         // Feature menu panel with borders
         JPanel featureMenuPanel = new JPanel(new BorderLayout());
