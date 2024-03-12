@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 public abstract class StructureObject {
     protected Point startPoint;
     protected Point endPoint;
+    protected boolean isSelected;
 
     public StructureObject(Point startPoint, Point endPoint) {
         this.startPoint = startPoint;
@@ -25,6 +26,14 @@ public abstract class StructureObject {
 
     public void setEndPoint(Point endPoint) {
         this.endPoint = endPoint;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     // Abstract method for drawing the object

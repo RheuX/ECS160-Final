@@ -7,7 +7,6 @@ import javax.swing.*;
 public class DrawingTools {
     private JPanel canvas;
     private DrawingMode drawingMode = DrawingMode.NONE;
-    private boolean deleteMode = false; // Flag for delete mode
     private Point tempPoint1;
     private Point tempPoint2;
     private static ManageCanvas manageCanvas;
@@ -77,10 +76,9 @@ public class DrawingTools {
 
 
     public void setDrawingMode(DrawingMode mode) {
-        System.out.println("Drawing Mode =  " + mode);
         this.drawingMode = mode;
     }
-    
+
     public void deleteSelectedObjects() {
         // Iterate over objects in canvas and delete selected ones
         for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
@@ -89,20 +87,26 @@ public class DrawingTools {
             }
         }
     
-        // for (StructureObject structureObject : manageCanvas.getAllStructures()) {
-        //     if (structureObject.isSelected()) {
-        //         manageCanvas.deleteStructure(structureObject);
-        //     }
-        // }
+        for (StructureObject structureObject : manageCanvas.getAllStructures()) {
+            if (structureObject.isSelected()) {
+                manageCanvas.deleteStructure(structureObject);
+            }
+        }
     
         // Redraw canvas after deletion
         redrawCanvas();
     }
+
+    public void rotateSelectedObjects(double angleInDegrees) {
+        for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
+            if (furniture.isSelected()) {
+                furniture.rotate(angleInDegrees);
+            }
+        }
+        redrawCanvas();
+    }    
     
     private void redrawCanvas() {
-        // Redraw the canvas after deleting an object
-        // You might need to call methods to clear the canvas and redraw all objects
-        // Implement this method based on your canvas implementation
         canvas.repaint(); 
     }
     
@@ -112,13 +116,18 @@ public class DrawingTools {
         g2d.dispose();
     }
 
-    static BufferedImage drawAllFurniture(MainCanvasPanel canvas) {
+    static BufferedImage drawAllObjects(MainCanvasPanel canvas) {
         BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
     
         // Draw all furniture objects
         for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
             furniture.draw(g2d);
+        }
+
+        // Draw all structure objects
+        for (StructureObject structure : manageCanvas.getAllStructures()) {
+            structure.draw(g2d);
         }
     
         g2d.dispose();
@@ -130,6 +139,8 @@ public class DrawingTools {
         furnitureObject.draw(g2d);
         g2d.dispose();
     }
+
+    
 
     private StructureObject createStructuralObject(Point startPoint, Point endPoint) {
         switch (drawingMode) {
@@ -145,43 +156,12 @@ public class DrawingTools {
     }
 
     private FurnitureObject createFurnitureObject(Point point, int width, int height) {
-        switch (drawingMode) {
-            case BED:
-                return new Bed(point, 100, 150);
-            case DESK:
-                return new Desk(point, width, height);
-            case CHAIR:
-                return new Chair(point, 25, 25);
-            case TOILET:
-                return new Toilet(point, 20, 50);
-            case SHOWER:
-                return new Shower(point, 40, 80);
-            case SINK:
-                return new Sink(point, 60, 45);
-            case TABLE:
-                return new Table(point, width+20, height+40);
-            case DININGCHAIR:
-                return new DiningChair(point, 25, 25); 
-            case REFRIGERATOR:
-                return new Refrigerator(point, 50, 50);
-            case SOFA:
-                return new Sofa(point, width, height);
-            case TV:
-                return new TV(point, width, height);
-            case COUCH:
-                return new Couch(point, 50, 40);
-            default:
-                throw new IllegalArgumentException("Unknown drawing mode: " + drawingMode);
-        }
+        return FurnitureFactory.createFurniture(drawingMode, point, width, height);
     }
 
     public enum DrawingMode {
         NONE,
-        DELETE,
         RESIZE,
-        ROTATE_LEFT,
-        ROTATE_RIGHT,
-        ROTATE_FLIP,
         WALL,
         WINDOW,
         BED,

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class FeatureBarPanel extends JPanel {
     private static final int button_width = 80;
@@ -18,12 +19,12 @@ public class FeatureBarPanel extends JPanel {
 
         // Tools panel with icons
         JPanel toolsPanel = new JPanel(new GridLayout(3, 2));
-        addButtonToPanel(toolsPanel, createDrawingButton("Mouse", "none.png", DrawingTools.DrawingMode.NONE, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Delete", "delete.png", drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Resize", "resize.png", DrawingTools.DrawingMode.RESIZE, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Left", "rotate-left.png", DrawingTools.DrawingMode.ROTATE_LEFT, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Right", "rotate-right.png", DrawingTools.DrawingMode.ROTATE_RIGHT, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Flip", "rotate-180.png", DrawingTools.DrawingMode.ROTATE_FLIP, drawingTools));
+        addButtonToPanel(toolsPanel, createDrawingButton("Mouse", "none.png", DrawingTools.DrawingMode.NONE, drawingTools, null));
+        addButtonToPanel(toolsPanel, createDrawingButton("Delete", "delete.png", null, drawingTools, drawingTools::deleteSelectedObjects));
+        addButtonToPanel(toolsPanel, createDrawingButton("Resize", "resize.png", DrawingTools.DrawingMode.RESIZE, drawingTools, null));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Left", "rotate-left.png", null, drawingTools, () -> drawingTools.rotateSelectedObjects(90)));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Right", "rotate-right.png", null, drawingTools, null));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Flip", "rotate-180.png", null, drawingTools, null));
         featureMenuPanel.add(toolsPanel, BorderLayout.NORTH);
 
         // Search bar panel
@@ -52,25 +53,21 @@ public class FeatureBarPanel extends JPanel {
         add(featureMenuPanel, BorderLayout.CENTER);
     }
 
-    private JButton createDrawingButton(String buttonText, String iconFileName, DrawingTools.DrawingMode mode, DrawingTools drawingTools) {
+    private JButton createDrawingButton(String buttonText, String iconFileName, DrawingTools.DrawingMode mode, DrawingTools drawingTools, Runnable extraFunction) {
         String iconDirectory = "../assets";
         String iconPath = iconDirectory + "/" + iconFileName;
         ImageIcon icon = new ImageIcon(iconPath);
         JButton button = new JButton(buttonText, icon);
         button.setPreferredSize(new Dimension(button_width, button_height));
-        button.addActionListener(e -> drawingTools.setDrawingMode(mode));
+        button.addActionListener(e -> {
+            drawingTools.setDrawingMode(mode);
+            if (extraFunction != null) {
+                extraFunction.run();
+            }
+        });
         return button;
     }
 
-    private JButton createDrawingButton(String buttonText, String iconFileName, DrawingTools drawingTools) {
-        String iconDirectory = "../assets";
-        String iconPath = iconDirectory + "/" + iconFileName;
-        ImageIcon icon = new ImageIcon(iconPath);
-        JButton button = new JButton(buttonText, icon);
-        button.setPreferredSize(new Dimension(button_width, button_height));
-        button.addActionListener(e -> drawingTools.deleteSelectedObjects());
-        return button;
-    }
 
     private void addButtonToPanel(Container container, JButton button) {
         container.add(button);
