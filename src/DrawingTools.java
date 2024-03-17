@@ -114,13 +114,18 @@ public class DrawingTools {
         g2d.dispose();
     }
 
-    static BufferedImage drawAllFurniture(MainCanvasPanel canvas) {
+    static BufferedImage drawAllFurnitureAndStructures(MainCanvasPanel canvas) {
         BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
     
         // Draw all furniture objects
         for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
             furniture.draw(g2d);
+        }
+
+        // Draw all structure objects 
+        for (StructureObject structure : manageCanvas.getAllStructures()) {
+            structure.draw(g2d);
         }
     
         g2d.dispose();
