@@ -54,7 +54,7 @@ public class MainCanvasPanel extends JPanel {
             g2d.drawLine(0, y, width, y);
         }
 
-        g2d.drawImage(DrawingTools.drawAllFurniture(this), 0, 0, null);
+        g2d.drawImage(DrawingTools.drawAllFurnitureAndStructures(this), 0, 0, null);
 
         g2d.dispose(); 
     }
