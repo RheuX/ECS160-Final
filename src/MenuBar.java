@@ -49,6 +49,7 @@ public class MenuBar extends JMenuBar {
         JMenuItem redoItem = new JMenuItem("Redo");
         redoItem.setMnemonic(KeyEvent.VK_X);
         redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+        redoItem.addActionListener(e -> redoAction()); // Add ActionListener for Undo
         editMenu.add(redoItem);
 
         JMenuItem clearItem = new JMenuItem("Clear");
@@ -91,6 +92,16 @@ public class MenuBar extends JMenuBar {
         } else {
             JOptionPane.showMessageDialog(null, "Nothing to undo", "Undo", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void redoAction() {
+        if (commandManager.canRedo()) {
+            commandManager.redo();
+            mainCanvasPanel.repaint();
+        } else {
+            JOptionPane.showMessageDialog(null, "Nothing to redo", "Redo", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
     
 }

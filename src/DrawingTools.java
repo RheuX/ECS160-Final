@@ -1,8 +1,10 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import java.util.List;
 
 public class DrawingTools {
     private JPanel canvas;
@@ -84,12 +86,18 @@ public class DrawingTools {
     }
     
     public void deleteSelectedObjects() {
-        // Iterate over objects in canvas and delete selected ones
+        List<FurnitureObject> selectedFurniture = new ArrayList<>();
         for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
             if (furnitureObject.isSelected()) {
-                manageCanvas.deleteFurniture(furnitureObject);
+                selectedFurniture.add(furnitureObject);
             }
         }
+
+        // Create a command to delete selected furniture
+        DeleteFurnitureCommand deleteCommand = new DeleteFurnitureCommand(manageCanvas, selectedFurniture);
+        
+        // Execute the command
+        commandManager.executeCommand(deleteCommand);
     
         // for (StructureObject structureObject : manageCanvas.getAllStructures()) {
         //     if (structureObject.isSelected()) {
