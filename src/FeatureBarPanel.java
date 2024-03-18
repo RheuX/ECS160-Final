@@ -21,9 +21,9 @@ public class FeatureBarPanel extends JPanel {
         addButtonToPanel(toolsPanel, createDrawingButton("Mouse", "none.png", DrawingTools.DrawingMode.NONE, drawingTools));
         addButtonToPanel(toolsPanel, createDrawingButton("Delete", "delete.png", drawingTools));
         addButtonToPanel(toolsPanel, createDrawingButton("Resize", "resize.png", DrawingTools.DrawingMode.RESIZE, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Left", "rotate-left.png", DrawingTools.DrawingMode.ROTATE_LEFT, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Right", "rotate-right.png", DrawingTools.DrawingMode.ROTATE_RIGHT, drawingTools));
-        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Flip", "rotate-180.png", DrawingTools.DrawingMode.ROTATE_FLIP, drawingTools));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Left", "rotate-left.png", drawingTools, 90));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Right", "rotate-right.png", drawingTools, -90));
+        addButtonToPanel(toolsPanel, createDrawingButton("Rotate-Flip", "rotate-180.png", drawingTools, 180));
         featureMenuPanel.add(toolsPanel, BorderLayout.NORTH);
 
         // Search bar panel
@@ -69,6 +69,16 @@ public class FeatureBarPanel extends JPanel {
         JButton button = new JButton(buttonText, icon);
         button.setPreferredSize(new Dimension(button_width, button_height));
         button.addActionListener(e -> drawingTools.deleteSelectedObjects());
+        return button;
+    }
+
+    private JButton createDrawingButton(String buttonText, String iconFileName, DrawingTools drawingTools, double rotateAngle) {
+        String iconDirectory = "../assets";
+        String iconPath = iconDirectory + "/" + iconFileName;
+        ImageIcon icon = new ImageIcon(iconPath);
+        JButton button = new JButton(buttonText, icon);
+        button.setPreferredSize(new Dimension(button_width, button_height));
+        button.addActionListener(e -> drawingTools.rotateSelectedFurniture(rotateAngle));
         return button;
     }
 

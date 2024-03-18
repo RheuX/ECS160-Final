@@ -6,6 +6,7 @@ public abstract class FurnitureObject {
     protected int width;
     protected int height;
     protected boolean isSelected;
+    protected double rotationAngle; // New field to store rotation angle
     protected static final Stroke DOTTED_STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
     protected static final Color OUTLINE_COLOR = Color.BLACK;
 
@@ -14,6 +15,7 @@ public abstract class FurnitureObject {
         this.width = width;
         this.height = height;
         this.isSelected = false;
+        this.rotationAngle = 0; // Default rotation angle is 0 degrees
     }
 
     public int getWidth() {
@@ -34,6 +36,14 @@ public abstract class FurnitureObject {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public double getRotationAngle() {
+        return rotationAngle;
+    }
+
+    public void setRotationAngle(double rotationAngle) {
+        this.rotationAngle += rotationAngle;
     }
 
     public boolean contains(Point point) {

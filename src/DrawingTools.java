@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.util.List;
+import java.awt.geom.AffineTransform;
 
 public class DrawingTools {
     private JPanel canvas;
@@ -108,6 +109,24 @@ public class DrawingTools {
         // Redraw canvas after deletion
         redrawCanvas();
     }
+
+    public void rotateSelectedFurniture(double rotationAngle) {
+        List<FurnitureObject> selectedFurniture = new ArrayList<>();
+        for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
+            if (furnitureObject.isSelected()) {
+                selectedFurniture.add(furnitureObject);
+            }
+        }
+    
+        // Create a command to rotate selected furniture objects
+        RotateFurnitureCommand rotateCommand = new RotateFurnitureCommand(manageCanvas, selectedFurniture, rotationAngle);
+        
+        // Execute the command
+        commandManager.executeCommand(rotateCommand);
+    
+        // Redraw the canvas
+        redrawCanvas();
+    }
     
     private void redrawCanvas() {
         // Redraw the canvas after deleting an object
@@ -123,26 +142,46 @@ public class DrawingTools {
     }
 
     static BufferedImage drawAllFurnitureAndStructures(MainCanvasPanel canvas) {
-        BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = image.createGraphics();
+    BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = image.createGraphics();
     
-        // Draw all furniture objects
-        for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
-            furniture.draw(g2d);
-        }
-
-        // Draw all structure objects 
-        for (StructureObject structure : manageCanvas.getAllStructures()) {
-            structure.draw(g2d);
-        }
-    
-        g2d.dispose();
-        return image;
+    // Draw all furniture objects
+    for (FurnitureObject furniture : manageCanvas.getAllFurniture()) {
+        double rotationAngle = Math.toRadians(furniture.getRotationAngle());
+        AffineTransform oldTransform = g2d.getTransform(); // Save the current transform
+        AffineTransform rotationTransform = AffineTransform.getRotateInstance(rotationAngle, furniture.getStartPoint().getX(), furniture.getStartPoint().getY());
+        g2d.transform(rotationTransform); // Apply rotation transformation
+        furniture.draw(g2d); // Draw the furniture object
+        g2d.setTransform(oldTransform); // Restore the original transform
     }
+
+    // Draw all structure objects 
+    for (StructureObject structure : manageCanvas.getAllStructures()) {
+        structure.draw(g2d);
+    }
+    
+    g2d.dispose();
+    return image;
+}
+
 
     public void drawFurnitureObject(FurnitureObject furnitureObject) {
         Graphics2D g2d = (Graphics2D) canvas.getGraphics();
+
+        // Get the rotation angle (in radians or degrees)
+        double rotationAngle = Math.toRadians(furnitureObject.getRotationAngle()); // Convert degrees to radians if needed
+
+        // Create a new AffineTransform for rotation
+        AffineTransform oldTransform = g2d.getTransform(); // Save the current transform
+        AffineTransform rotationTransform = AffineTransform.getRotateInstance(rotationAngle, furnitureObject.getStartPoint().getX(), furnitureObject.getStartPoint().getY());
+        g2d.transform(rotationTransform);
+
+        // Draw the furniture object
         furnitureObject.draw(g2d);
+
+        // Restore the original transform
+        g2d.setTransform(oldTransform);
+
         g2d.dispose();
     }
 
