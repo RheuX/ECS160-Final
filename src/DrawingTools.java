@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,6 +35,7 @@ public class DrawingTools {
         Point clickPoint = e.getPoint();
         if (drawingMode == DrawingMode.NONE) {
             handleFurnitureSelection(clickPoint);
+            handleStructureSelection(clickPoint);
         } else if (isStructure()) {
             handleStructureCreation(clickPoint);
         } else if (isFurniture()) {
@@ -52,6 +52,17 @@ public class DrawingTools {
             }
         }
     }
+
+    private void handleStructureSelection(Point clickPoint) {
+        for (StructureObject structure : manageCanvas.getAllStructures()) {
+            if (structure.contains(clickPoint)) {
+                structure.setSelected(!structure.isSelected());
+                redrawCanvas();
+                break;
+            }
+        }
+    }
+
 
     private void handleStructureCreation(Point clickPoint) {
         if (tempPoint1 == null) {
@@ -89,23 +100,28 @@ public class DrawingTools {
     
     public void deleteSelectedObjects() {
         List<FurnitureObject> selectedFurniture = new ArrayList<>();
+        List<StructureObject> selectedStructure = new ArrayList<>();
         for (FurnitureObject furnitureObject : manageCanvas.getAllFurniture()) {
             if (furnitureObject.isSelected()) {
                 selectedFurniture.add(furnitureObject);
             }
         }
 
+        for (StructureObject structureObject : manageCanvas.getAllStructures()) {
+            if (structureObject.isSelected()) {
+                selectedStructure.add(structureObject);
+            }
+        }
+
         // Create a command to delete selected furniture
-        DeleteFurnitureCommand deleteCommand = new DeleteFurnitureCommand(manageCanvas, selectedFurniture);
+        DeleteFurnitureCommand deleteFurnitureCommand = new DeleteFurnitureCommand(manageCanvas, selectedFurniture);
+         // Create a command to delete selected furniture
+        DeleteStructureCommand deleteStructureCommand = new DeleteStructureCommand(manageCanvas, selectedStructure);
         
         // Execute the command
-        commandManager.executeCommand(deleteCommand);
-    
-        // for (StructureObject structureObject : manageCanvas.getAllStructures()) {
-        //     if (structureObject.isSelected()) {
-        //         manageCanvas.deleteStructure(structureObject);
-        //     }
-        // }
+        commandManager.executeCommand(deleteFurnitureCommand);
+        // Execute the command
+        commandManager.executeCommand(deleteStructureCommand);
     
         // Redraw canvas after deletion
         redrawCanvas();

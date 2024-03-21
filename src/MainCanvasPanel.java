@@ -1,17 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class MainCanvasPanel extends JPanel {
-    private BufferedImage canvas;
     private int originalGridSize = 30; // Size of each grid cell
     private double zoomFactor = 1.0;
     private int scaledGridSize = (int) (originalGridSize * zoomFactor);
 
     public MainCanvasPanel() {
-        canvas = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
         setPreferredSize(new Dimension(800, 600));
         addComponentListener(new ResizeComponentListener());
     }

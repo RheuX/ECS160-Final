@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class FeatureBarPanel extends JPanel {
     private static final int button_width = 80;
@@ -35,6 +38,21 @@ public class FeatureBarPanel extends JPanel {
         searchBar.setPreferredSize(new Dimension(150, 25));
         searchBar.setMaximumSize(new Dimension(150, 25));
         searchBar.setText("Search furniture...");
+        searchBar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchBar.getText();
+                // Assuming DrawingMode is an enum containing the available modes
+                try {
+                    DrawingTools.DrawingMode mode = DrawingTools.DrawingMode.valueOf(searchText.toUpperCase());
+                    // If the mode exists, set the drawing mode
+                    drawingTools.setDrawingMode(mode);
+                } catch (IllegalArgumentException ex) {
+                    // If the mode does not exist, show an error message with the searched text
+                    JOptionPane.showMessageDialog(null, searchText + " not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         searchBarPanel.add(searchBar, BorderLayout.CENTER);
         featureMenuPanel.add(searchBarPanel, BorderLayout.SOUTH);
 
@@ -56,7 +74,7 @@ public class FeatureBarPanel extends JPanel {
         String iconDirectory = "../assets";
         String iconPath = iconDirectory + "/" + iconFileName;
         ImageIcon icon = new ImageIcon(iconPath);
-        JButton button = new JButton(buttonText, icon);
+        JButton button = new JButton("<html><center>" + buttonText + "</center></html>", icon); // Enable text wrapping
         button.setPreferredSize(new Dimension(button_width, button_height));
         button.addActionListener(e -> drawingTools.setDrawingMode(mode));
         return button;
@@ -66,7 +84,7 @@ public class FeatureBarPanel extends JPanel {
         String iconDirectory = "../assets";
         String iconPath = iconDirectory + "/" + iconFileName;
         ImageIcon icon = new ImageIcon(iconPath);
-        JButton button = new JButton(buttonText, icon);
+        JButton button = new JButton("<html><center>" + buttonText + "</center></html>", icon); // Enable text wrapping
         button.setPreferredSize(new Dimension(button_width, button_height));
         button.addActionListener(e -> drawingTools.deleteSelectedObjects());
         return button;
@@ -76,7 +94,7 @@ public class FeatureBarPanel extends JPanel {
         String iconDirectory = "../assets";
         String iconPath = iconDirectory + "/" + iconFileName;
         ImageIcon icon = new ImageIcon(iconPath);
-        JButton button = new JButton(buttonText, icon);
+        JButton button = new JButton("<html><center>" + buttonText + "</center></html>", icon); // Enable text wrapping
         button.setPreferredSize(new Dimension(button_width, button_height));
         button.addActionListener(e -> drawingTools.rotateSelectedFurniture(rotateAngle));
         return button;
