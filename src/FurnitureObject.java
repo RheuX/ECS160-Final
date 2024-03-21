@@ -1,6 +1,7 @@
 import java.awt.*;
+import java.io.Serializable;
 
-public abstract class FurnitureObject {
+public abstract class FurnitureObject implements Serializable{
 
     protected Point startPoint;
     protected int width;

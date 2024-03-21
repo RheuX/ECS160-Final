@@ -8,10 +8,12 @@ Creates a JMenuBar which will serve as the menu for file an canvas related actio
 public class MenuBar extends JMenuBar {
     private final MainCanvasPanel mainCanvasPanel;
     private final CommandManager commandManager;
+    private final ManageCanvas manageCanvas;
 
-    public MenuBar(MainCanvasPanel mainCanvasPanel, CommandManager commandManager) {
+    public MenuBar(MainCanvasPanel mainCanvasPanel, CommandManager commandManager, ManageCanvas manageCanvas) {
         this.mainCanvasPanel = mainCanvasPanel;
         this.commandManager = commandManager;
+        this.manageCanvas = manageCanvas;
         add(createMenuBar());
     }
 
@@ -23,13 +25,13 @@ public class MenuBar extends JMenuBar {
         JMenuItem saveItem = new JMenuItem("Save");
         saveItem.setMnemonic(KeyEvent.VK_S);
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-        //saveItem.addActionListener(e -> saveImage());
+        saveItem.addActionListener(e -> saveCanvasToFile()); // Call save method
         fileMenu.add(saveItem);
 
         JMenuItem loadItem = new JMenuItem("Load");
         loadItem.setMnemonic(KeyEvent.VK_L);
         loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
-        //loadItem.addActionListener(e -> loadImage());
+        loadItem.addActionListener(e -> loadCanvasFromFile()); // Call load method
         fileMenu.add(loadItem);
 
         fileMenu.add(new JSeparator()); // Separator
@@ -70,11 +72,11 @@ public class MenuBar extends JMenuBar {
         canvasMenu.add(resizeItem);
 
         JMenuItem zoomInItem = new JMenuItem("Zoom In");
-        zoomInItem.addActionListener(e -> mainCanvasPanel.zoom(0.25));
+        //zoomInItem.addActionListener(e -> mainCanvasPanel.zoom(0.25));
         canvasMenu.add(zoomInItem);
 
         JMenuItem zoomOutItem = new JMenuItem("Zoom Out");
-        zoomOutItem.addActionListener(e -> mainCanvasPanel.zoom(-0.25));
+        //zoomOutItem.addActionListener(e -> mainCanvasPanel.zoom(-0.25));
         canvasMenu.add(zoomOutItem);
 
         menuBar.add(fileMenu);
@@ -101,7 +103,17 @@ public class MenuBar extends JMenuBar {
         } else {
             JOptionPane.showMessageDialog(null, "Nothing to redo", "Redo", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
 
+    // Method to save canvas data to a file
+    private void saveCanvasToFile() {
+        manageCanvas.saveCanvas("canvas_data.ser"); // Adjust the file name as needed
+    }
+
+    // Method to load canvas data from a file
+    private void loadCanvasFromFile() {
+        manageCanvas.loadCanvas("canvas_data.ser"); // Adjust the file name as needed
+        mainCanvasPanel.repaint(); // Repaint canvas after loading
     }
     
 }

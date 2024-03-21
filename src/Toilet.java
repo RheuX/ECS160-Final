@@ -3,6 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.BasicStroke;
 
+
 public class Toilet extends FurnitureObject {
     private static final int CIRCLE_RADIUS = 15; // Radius of the larger circle
     private static final int SMALL_CIRCLE_RADIUS = 7; // Radius of the smaller circle

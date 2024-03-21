@@ -1,8 +1,9 @@
 import java.awt.Point;
+import java.io.Serializable;
 import java.awt.Graphics2D;
 
 // @author ChatGPT
-public abstract class StructureObject {
+public abstract class StructureObject implements Serializable {
     protected Point startPoint;
     protected Point endPoint;
 

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 
 public class ManageCanvas {
     private List<StructureObject> structures;
@@ -51,6 +52,26 @@ public class ManageCanvas {
         System.out.println("Furniture on canvas:");
         for (int i = 0; i < furniture.size(); i++) {
             System.out.println((i + 1) + ". " + furniture.get(i).getClass().getSimpleName());
+        }
+    }
+
+    // Method to save the canvas data to a file
+    public void saveCanvas(String fileName) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            outputStream.writeObject(structures);
+            outputStream.writeObject(furniture);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to load the canvas data from a file
+    public void loadCanvas(String fileName) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            structures = (List<StructureObject>) inputStream.readObject();
+            furniture = (List<FurnitureObject>) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

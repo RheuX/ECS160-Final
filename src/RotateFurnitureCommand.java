@@ -1,12 +1,10 @@
 import java.util.List;
 
 public class RotateFurnitureCommand implements Command {
-    private final ManageCanvas manageCanvas;
     private final List<FurnitureObject> selectedFurniture;
     private final double rotationAngle;
 
-    public RotateFurnitureCommand(ManageCanvas manageCanvas, List<FurnitureObject> selectedFurniture, double rotationAngle) {
-        this.manageCanvas = manageCanvas;
+    public RotateFurnitureCommand(List<FurnitureObject> selectedFurniture, double rotationAngle) {
         this.selectedFurniture = selectedFurniture;
         this.rotationAngle = rotationAngle;
     }
