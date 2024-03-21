@@ -71,7 +71,8 @@ public class DrawingTools {
             tempPoint2 = clickPoint;
             StructureObject object = createStructuralObject(tempPoint1, tempPoint2);
             drawStructuralObject(object);
-            manageCanvas.addStructure(object);
+            AddCommand addComand = new AddCommand(manageCanvas, null, object);
+            commandManager.executeCommand(addComand);
             tempPoint1 = null;
             tempPoint2 = null;
         }
@@ -80,7 +81,7 @@ public class DrawingTools {
     private void handleFurnitureCreation(Point clickPoint) {
         FurnitureObject furnitureObject = createFurnitureObject(clickPoint, 50, 100);
         drawFurnitureObject(furnitureObject);
-        AddFurnitureCommand addCommand = new AddFurnitureCommand(manageCanvas, furnitureObject);
+        AddCommand addCommand = new AddCommand(manageCanvas, furnitureObject, null);
         commandManager.executeCommand(addCommand); // Execute the command
     }
 
@@ -113,15 +114,11 @@ public class DrawingTools {
             }
         }
 
-        // Create a command to delete selected furniture
-        DeleteFurnitureCommand deleteFurnitureCommand = new DeleteFurnitureCommand(manageCanvas, selectedFurniture);
-         // Create a command to delete selected furniture
-        DeleteStructureCommand deleteStructureCommand = new DeleteStructureCommand(manageCanvas, selectedStructure);
+        // Create a command to delete selected objects
+        DeleteCommand deleteCommand = new DeleteCommand(manageCanvas, selectedFurniture, selectedStructure);
         
         // Execute the command
-        commandManager.executeCommand(deleteFurnitureCommand);
-        // Execute the command
-        commandManager.executeCommand(deleteStructureCommand);
+        commandManager.executeCommand(deleteCommand);
     
         // Redraw canvas after deletion
         redrawCanvas();
