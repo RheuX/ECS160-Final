@@ -34,6 +34,15 @@ public class ManageCanvas {
         furniture.remove(piece);
     }
 
+    public void clearCanvas() {
+        // Clear the list of structures
+        structures.clear();
+        
+        // Clear the list of furniture
+        furniture.clear();
+    }
+    
+
     // Method to get all StructureObjects on the canvas
     public List<StructureObject> getAllStructures() {
         return new ArrayList<>(structures);

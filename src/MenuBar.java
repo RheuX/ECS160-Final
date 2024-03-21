@@ -57,6 +57,7 @@ public class MenuBar extends JMenuBar {
         JMenuItem clearItem = new JMenuItem("Clear");
         clearItem.setMnemonic(KeyEvent.VK_C);
         clearItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+        clearItem.addActionListener(e -> clearCanvas()); // Add ActionListener for Undo
         editMenu.add(clearItem);
 
         // Help Menu
@@ -89,6 +90,11 @@ public class MenuBar extends JMenuBar {
         } else {
             JOptionPane.showMessageDialog(null, "Nothing to redo", "Redo", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void clearCanvas() {
+        manageCanvas.clearCanvas();
+        mainCanvasPanel.repaint(); // Repaint canvas after loading
     }
 
     // Method to save canvas data to a file

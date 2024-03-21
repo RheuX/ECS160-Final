@@ -1,5 +1,3 @@
-import java.awt.Point;
-
 public class AddCommand implements Command {
     private final ManageCanvas manageCanvas;
     private final FurnitureObject furnitureObject;
