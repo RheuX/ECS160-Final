@@ -59,7 +59,7 @@ public class Shower extends FurnitureObject {
         if (isSelected()) {
             // Draw the dotted outline if the couch is selected
             g2d.setStroke(DOTTED_STROKE);
-            g2d.setColor(OUTLINE_COLOR);
+            g2d.setColor(SELECT_COLOR);
             g2d.drawRect(x - 3, y - 3, BASE_WIDTH + 6, BASE_HEIGHT + 6);
             g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
         }

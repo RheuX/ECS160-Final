@@ -26,7 +26,7 @@ public class Desk extends FurnitureObject {
         if (isSelected()) {
             // Draw the dotted outline if the couch is selected
             g2d.setStroke(FurnitureObject.DOTTED_STROKE);
-            g2d.setColor(OUTLINE_COLOR);
+            g2d.setColor(SELECT_COLOR);
             g2d.drawRect(x - 3, y - 3, width + 6, height + 6);
             g2d.setStroke(new BasicStroke()); // Reset the stroke to the default
         }

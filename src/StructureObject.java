@@ -12,7 +12,7 @@ public abstract class StructureObject implements Serializable {
     protected boolean isSelected;
     private static final int SELECTION_THRESHOLD = 10; // Adjust as needed
     protected static final Stroke DOTTED_STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
-    protected static final Color OUTLINE_COLOR = Color.BLACK;
+    protected static final Color OUTLINE_COLOR = Color.RED;
 
     public StructureObject(Point startPoint, Point endPoint) {
         this.startPoint = startPoint;

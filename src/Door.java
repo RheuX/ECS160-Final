@@ -31,6 +31,7 @@ public class Door extends StructureObject {
             if (isSelected) {
                 // Draw the dotted outline
                 g2d.setStroke(DOTTED_STROKE);
+                g2d.setColor(OUTLINE_COLOR);
                 int x = (int) startPoint.getX();
                 int y = (int) startPoint.getY();
                 int width = (int) (endPoint.getX() - startPoint.getX());

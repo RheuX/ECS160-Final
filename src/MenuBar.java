@@ -65,23 +65,9 @@ public class MenuBar extends JMenuBar {
         //aboutItem.addActionListener(e -> showAbout());
         helpMenu.add(aboutItem);
 
-        // Canvas Menu
-        JMenu canvasMenu = new JMenu("Canvas");
-
-        JMenuItem resizeItem = new JMenuItem("Resize");
-        canvasMenu.add(resizeItem);
-
-        JMenuItem zoomInItem = new JMenuItem("Zoom In");
-        //zoomInItem.addActionListener(e -> mainCanvasPanel.zoom(0.25));
-        canvasMenu.add(zoomInItem);
-
-        JMenuItem zoomOutItem = new JMenuItem("Zoom Out");
-        //zoomOutItem.addActionListener(e -> mainCanvasPanel.zoom(-0.25));
-        canvasMenu.add(zoomOutItem);
 
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
-        menuBar.add(canvasMenu);
         menuBar.add(helpMenu);
 
         return menuBar;

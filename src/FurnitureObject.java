@@ -10,6 +10,7 @@ public abstract class FurnitureObject implements Serializable{
     protected double rotationAngle; // New field to store rotation angle
     protected static final Stroke DOTTED_STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
     protected static final Color OUTLINE_COLOR = Color.BLACK;
+    protected static final Color SELECT_COLOR = Color.RED;
 
     public FurnitureObject(Point startPoint, int width, int height) {
         this.startPoint = startPoint;

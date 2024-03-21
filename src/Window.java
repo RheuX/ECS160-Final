@@ -18,6 +18,7 @@ public class Window extends StructureObject {
         if (isSelected) {
             // Draw the dotted outline
             g2d.setStroke(DOTTED_STROKE);
+            g2d.setColor(OUTLINE_COLOR);
             int x1 = Math.min(startPoint.x, endPoint.x) - 3;
             int y1 = Math.min(startPoint.y, endPoint.y) - 3;
             int width = Math.abs(startPoint.x - endPoint.x) + 6;
