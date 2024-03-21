@@ -107,12 +107,12 @@ public class MenuBar extends JMenuBar {
 
     // Method to save canvas data to a file
     private void saveCanvasToFile() {
-        manageCanvas.saveCanvas("canvas_data.ser"); // Adjust the file name as needed
+        manageCanvas.saveCanvas(); // Adjust the file name as needed
     }
 
     // Method to load canvas data from a file
     private void loadCanvasFromFile() {
-        manageCanvas.loadCanvas("canvas_data.ser"); // Adjust the file name as needed
+        manageCanvas.loadCanvas(); // Adjust the file name as needed
         mainCanvasPanel.repaint(); // Repaint canvas after loading
     }
     

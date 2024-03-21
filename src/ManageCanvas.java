@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFileChooser;
+
 import java.io.*;
 
 public class ManageCanvas {
@@ -56,22 +59,36 @@ public class ManageCanvas {
     }
 
     // Method to save the canvas data to a file
-    public void saveCanvas(String fileName) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            outputStream.writeObject(structures);
-            outputStream.writeObject(furniture);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void saveCanvas() {
+        JFileChooser fileChooser = new JFileChooser();
+        int userSelection = fileChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileToSave))) {
+                outputStream.writeObject(structures);
+                outputStream.writeObject(furniture);
+                System.out.println("Canvas saved successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // Method to load the canvas data from a file
-    public void loadCanvas(String fileName) {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-            structures = (List<StructureObject>) inputStream.readObject();
-            furniture = (List<FurnitureObject>) inputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+    public void loadCanvas() {
+        JFileChooser fileChooser = new JFileChooser();
+        int userSelection = fileChooser.showOpenDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileToLoad))) {
+                structures = (List<StructureObject>) inputStream.readObject();
+                furniture = (List<FurnitureObject>) inputStream.readObject();
+                System.out.println("Canvas loaded successfully.");
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

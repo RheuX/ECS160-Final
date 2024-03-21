@@ -203,27 +203,6 @@ public class DrawingTools {
         return FurnitureFactory.createFurniture(drawingMode, point, width, height);
     }
 
-    // Method to save canvas data to a file
-    public void saveCanvasToFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showSaveDialog(canvas);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            manageCanvas.saveCanvas(file.getAbsolutePath());
-        }
-    }
-
-    // Method to load canvas data from a file
-    public void loadCanvasFromFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(canvas);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            manageCanvas.loadCanvas(file.getAbsolutePath());
-            redrawCanvas(); // Redraw canvas after loading
-        }
-    }
-
     public enum DrawingMode {
         NONE,
         DELETE,
